@@ -34,7 +34,7 @@ describe('Result', function() {
 
       it('displays options', function() {
         const buttons = wrapper.find('.btn-group').find('a');
-        expect(buttons).toHaveLength(5);
+        expect(buttons).toHaveLength(3);
       });
 
       it('toggles', function() {
@@ -92,6 +92,7 @@ describe('Result', function() {
           data={data}
           organization={organization}
           savedQuery={TestStubs.DiscoverSavedQuery()}
+          updatePage={null}
         />
       );
     });
