@@ -2,6 +2,7 @@ import React from 'react';
 import {browserHistory} from 'react-router';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import styled from 'react-emotion';
 import {Box, Flex} from 'grid-emotion';
 
 import SentryTypes from 'app/sentryTypes';
@@ -10,6 +11,7 @@ import Link from 'app/components/link';
 import BarChart from 'app/components/charts/barChart';
 import LineChart from 'app/components/charts/lineChart';
 import space from 'app/styles/space';
+import Button from 'app/components/button';
 
 import {addSuccessMessage, addErrorMessage} from 'app/actionCreators/indicator';
 
@@ -75,7 +77,9 @@ export default class Result extends React.Component {
       return {
         isEditMode,
         savedQueryName: isEditMode
-          ? savedQuery ? savedQuery.name : generateQueryName()
+          ? savedQuery
+            ? savedQuery.name
+            : generateQueryName()
           : null,
       };
     });
@@ -92,7 +96,9 @@ export default class Result extends React.Component {
           tct('Successfully saved query [name]', {name: savedQuery.name})
         );
         browserHistory.push({
-          pathname: `/organizations/${organization.slug}/discover/saved/${savedQuery.id}/`,
+          pathname: `/organizations/${organization.slug}/discover/saved/${
+            savedQuery.id
+          }/`,
         });
       })
       .catch(err => {
@@ -215,7 +221,10 @@ export default class Result extends React.Component {
   }
 
   render() {
-    const {data: {baseQuery, byDayQuery}, savedQuery} = this.props;
+    const {
+      data: {baseQuery, byDayQuery},
+      savedQuery,
+    } = this.props;
 
     const {view} = this.state;
 
@@ -290,28 +299,30 @@ export default class Result extends React.Component {
             {this.renderNote()}
           </ChartWrapper>
         )}
-        <div className="stream-pagination clearfix">
-          <div className="btn-group pull-right">
-            <a
-              className="btn btn-default btn-sm prev"
-              onClick={() => {
-                this.getPreviousPage();
-              }}
-            >
-              <span title={t('Previous')} className="icon-arrow-left" />
-            </a>
-            <a
-              className="btn btn-default btn-sm next"
-              onClick={() => {
-                this.getNextPage();
-              }}
-            >
-              <span title={t('Next')} className="icon-arrow-right" />
-            </a>
-          </div>
-        </div>
+        {view === 'table' && (
+          <PaginationButtons className="btn-group">
+            <Button
+              className="btn"
+              disabled={!baseQuery.previous.results}
+              size="xsmall"
+              icon="icon-chevron-left"
+              onClick={() => this.getPreviousPage()}
+            />
+            <Button
+              className="btn"
+              disabled={!baseQuery.next.results}
+              size="xsmall"
+              icon="icon-chevron-right"
+              onClick={() => this.getNextPage()}
+            />
+          </PaginationButtons>
+        )}
         {this.renderSummary()}
       </Box>
     );
   }
 }
+
+const PaginationButtons = styled(Flex)`
+  justify-content: flex-end;
+`;
