@@ -303,14 +303,14 @@ export default class Result extends React.Component {
           <PaginationButtons className="btn-group">
             <Button
               className="btn"
-              disabled={!baseQuery.previous.results}
+              disabled={baseQuery.previous && !baseQuery.previous.results}
               size="xsmall"
               icon="icon-chevron-left"
               onClick={() => this.getPreviousPage()}
             />
             <Button
               className="btn"
-              disabled={!baseQuery.next.results}
+              disabled={baseQuery.next && !baseQuery.next.results}
               size="xsmall"
               icon="icon-chevron-right"
               onClick={() => this.getNextPage()}
