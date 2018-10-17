@@ -60,7 +60,7 @@ export function updateOrganization(org) {
   OrganizationsActions.update(org);
 }
 
-export function fetchOrganizationsByMember(memberId, {setActive}) {
+export function fetchOrganizationsByMember(memberId, {loadOrganizations}) {
   let api = new Client();
   let request = api.requestPromise('/organizations/', {
     query: {
@@ -69,8 +69,8 @@ export function fetchOrganizationsByMember(memberId, {setActive}) {
   });
 
   request.then(data => {
-    if (data.length && setActive) {
-      setActiveOrganization(data[0]);
+    if (data.length && loadOrganizations) {
+      OrganizationsStore.load(data);
     }
   });
 
